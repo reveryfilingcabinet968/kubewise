@@ -31,6 +31,9 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-go-
 
+      - name: Sync vendor
+        run: go mod tidy && go mod vendor
+
       - name: golangci-lint
         uses: golangci/golangci-lint-action@v9
         with:
@@ -62,6 +65,9 @@ jobs:
             ${{ runner.os }}-go-
 
 
+      - name: Sync vendor
+        run: go mod tidy && go mod vendor
+
       - name: Run unit tests
         run: make test-unit
 
@@ -87,6 +93,9 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-go-
 
+
+      - name: Sync vendor
+        run: go mod tidy && go mod vendor
 
       - name: Build binary
         run: make build

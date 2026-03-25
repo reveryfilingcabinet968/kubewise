@@ -12,7 +12,7 @@
 </p>
 
 <p align="center">
-  <a href="https://github.com/tochemey/kubewise/actions/workflows/ci.yml"><img src="https://github.com/tochemey/kubewise/actions/workflows/ci.yml/badge.svg" alt="CI"></a>
+  <a href="https://github.com/tochemey/kubewise/actions"><img alt="GitHub Actions Workflow Status" src="https://img.shields.io/github/actions/workflow/status/tochemey/kubewise/ci.yml"></a>
   <a href="https://github.com/tochemey/kubewise/releases"><img src="https://img.shields.io/github/v/release/tochemey/kubewise?style=flat-square" alt="Release"></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/license-Apache%202.0-blue?style=flat-square" alt="License"></a>
   <a href="https://goreportcard.com/report/github.com/tochemey/kubewise"><img src="https://goreportcard.com/badge/github.com/tochemey/kubewise?style=flat-square" alt="Go Report Card"></a>
@@ -20,7 +20,7 @@
 
 ---
 
-## 🔥 The Problem
+## 😵 The Problem
 
 Kubernetes billing is a black box. Teams overprovision because the cost of an outage outweighs the cost of waste — and nobody has time to model the tradeoffs. Cloud cost tools tell you *what you're spending*, but they don't answer **"what would happen if I changed X?"** You're flying blind every time you touch resource requests, node pools, or scheduling policies.
 
