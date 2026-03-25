@@ -1,0 +1,158 @@
+{
+  "timestamp": "2026-01-15T10:00:00Z",
+  "nodes": [
+    {
+      "name": "node-1",
+      "instanceType": "m5.xlarge",
+      "region": "us-east-1",
+      "zone": "us-east-1a",
+      "allocatable": {"cpu": 4000, "memory": 17179869184},
+      "capacity": {"cpu": 4000, "memory": 17179869184},
+      "labels": {
+        "node.kubernetes.io/instance-type": "m5.xlarge",
+        "topology.kubernetes.io/region": "us-east-1",
+        "topology.kubernetes.io/zone": "us-east-1a",
+        "eks.amazonaws.com/nodegroup": "default-pool"
+      },
+      "taints": [],
+      "conditions": [{"type": "Ready", "status": "True"}],
+      "nodePool": "default-pool"
+    },
+    {
+      "name": "node-2",
+      "instanceType": "m5.xlarge",
+      "region": "us-east-1",
+      "zone": "us-east-1b",
+      "allocatable": {"cpu": 4000, "memory": 17179869184},
+      "capacity": {"cpu": 4000, "memory": 17179869184},
+      "labels": {
+        "node.kubernetes.io/instance-type": "m5.xlarge",
+        "topology.kubernetes.io/region": "us-east-1",
+        "topology.kubernetes.io/zone": "us-east-1b",
+        "eks.amazonaws.com/nodegroup": "default-pool"
+      },
+      "taints": [],
+      "conditions": [{"type": "Ready", "status": "True"}],
+      "nodePool": "default-pool"
+    },
+    {
+      "name": "node-3",
+      "instanceType": "m5.xlarge",
+      "region": "us-east-1",
+      "zone": "us-east-1a",
+      "allocatable": {"cpu": 4000, "memory": 17179869184},
+      "capacity": {"cpu": 4000, "memory": 17179869184},
+      "labels": {
+        "node.kubernetes.io/instance-type": "m5.xlarge",
+        "topology.kubernetes.io/region": "us-east-1",
+        "topology.kubernetes.io/zone": "us-east-1a",
+        "eks.amazonaws.com/nodegroup": "default-pool",
+        "dedicated": "gpu"
+      },
+      "taints": [{"key": "dedicated", "value": "gpu", "effect": "NoSchedule"}],
+      "conditions": [{"type": "Ready", "status": "True"}],
+      "nodePool": "default-pool"
+    }
+  ],
+  "pods": [
+    {
+      "name": "web-abc1", "namespace": "default",
+      "ownerRef": {"kind": "Deployment", "name": "web"},
+      "containers": [{"name": "nginx", "image": "nginx:1.25", "requests": {"cpu": 500, "memory": 536870912}, "limits": {"cpu": 1000, "memory": 1073741824}}],
+      "nodeName": "node-1", "labels": {"app": "web"}, "tolerations": [], "topologySpreadConstraints": [], "pvcNames": [], "phase": "Running", "isSpot": false
+    },
+    {
+      "name": "web-abc2", "namespace": "default",
+      "ownerRef": {"kind": "Deployment", "name": "web"},
+      "containers": [{"name": "nginx", "image": "nginx:1.25", "requests": {"cpu": 500, "memory": 536870912}, "limits": {"cpu": 1000, "memory": 1073741824}}],
+      "nodeName": "node-2", "labels": {"app": "web"}, "tolerations": [], "topologySpreadConstraints": [], "pvcNames": [], "phase": "Running", "isSpot": false
+    },
+    {
+      "name": "web-abc3", "namespace": "default",
+      "ownerRef": {"kind": "Deployment", "name": "web"},
+      "containers": [{"name": "nginx", "image": "nginx:1.25", "requests": {"cpu": 500, "memory": 536870912}, "limits": {"cpu": 1000, "memory": 1073741824}}],
+      "nodeName": "node-1", "labels": {"app": "web"}, "tolerations": [], "topologySpreadConstraints": [], "pvcNames": [], "phase": "Running", "isSpot": false
+    },
+    {
+      "name": "api-def1", "namespace": "api",
+      "ownerRef": {"kind": "Deployment", "name": "api"},
+      "containers": [{"name": "api", "image": "api:v2", "requests": {"cpu": 250, "memory": 268435456}, "limits": {"cpu": 500, "memory": 536870912}}],
+      "nodeName": "node-2", "labels": {"app": "api"}, "tolerations": [], "topologySpreadConstraints": [], "pvcNames": [], "phase": "Running", "isSpot": false
+    },
+    {
+      "name": "api-def2", "namespace": "api",
+      "ownerRef": {"kind": "Deployment", "name": "api"},
+      "containers": [{"name": "api", "image": "api:v2", "requests": {"cpu": 250, "memory": 268435456}, "limits": {"cpu": 500, "memory": 536870912}}],
+      "nodeName": "node-1", "labels": {"app": "api"}, "tolerations": [], "topologySpreadConstraints": [], "pvcNames": [], "phase": "Running", "isSpot": false
+    },
+    {
+      "name": "pipeline-1", "namespace": "data-pipeline",
+      "ownerRef": {"kind": "Deployment", "name": "pipeline"},
+      "containers": [{"name": "worker", "image": "pipeline:v1", "requests": {"cpu": 1000, "memory": 2147483648}, "limits": {"cpu": 2000, "memory": 4294967296}}],
+      "nodeName": "node-2", "labels": {"app": "pipeline"}, "tolerations": [], "topologySpreadConstraints": [], "pvcNames": [], "phase": "Running", "isSpot": false
+    },
+    {
+      "name": "pipeline-2", "namespace": "data-pipeline",
+      "ownerRef": {"kind": "Deployment", "name": "pipeline"},
+      "containers": [{"name": "worker", "image": "pipeline:v1", "requests": {"cpu": 1000, "memory": 2147483648}, "limits": {"cpu": 2000, "memory": 4294967296}}],
+      "nodeName": "node-1", "labels": {"app": "pipeline"}, "tolerations": [], "topologySpreadConstraints": [], "pvcNames": [], "phase": "Running", "isSpot": false
+    },
+    {
+      "name": "monitor-ds-1", "namespace": "kube-system",
+      "ownerRef": {"kind": "DaemonSet", "name": "monitor"},
+      "containers": [{"name": "agent", "image": "monitor:v1", "requests": {"cpu": 100, "memory": 134217728}, "limits": {"cpu": 200, "memory": 268435456}}],
+      "nodeName": "node-1", "labels": {"app": "monitor"}, "tolerations": [{"key": "dedicated", "operator": "Exists", "value": "", "effect": ""}], "topologySpreadConstraints": [], "pvcNames": [], "phase": "Running", "isSpot": false
+    },
+    {
+      "name": "monitor-ds-2", "namespace": "kube-system",
+      "ownerRef": {"kind": "DaemonSet", "name": "monitor"},
+      "containers": [{"name": "agent", "image": "monitor:v1", "requests": {"cpu": 100, "memory": 134217728}, "limits": {"cpu": 200, "memory": 268435456}}],
+      "nodeName": "node-2", "labels": {"app": "monitor"}, "tolerations": [{"key": "dedicated", "operator": "Exists", "value": "", "effect": ""}], "topologySpreadConstraints": [], "pvcNames": [], "phase": "Running", "isSpot": false
+    },
+    {
+      "name": "gpu-job-1", "namespace": "default",
+      "ownerRef": {"kind": "Job", "name": "gpu-job"},
+      "containers": [{"name": "cuda", "image": "cuda:v1", "requests": {"cpu": 2000, "memory": 4294967296}, "limits": {"cpu": 4000, "memory": 8589934592}}],
+      "nodeName": "node-3", "labels": {"app": "gpu-job"}, "tolerations": [{"key": "dedicated", "operator": "Equal", "value": "gpu", "effect": "NoSchedule"}],
+      "topologySpreadConstraints": [],
+      "pvcNames": [], "phase": "Running", "isSpot": false,
+      "affinity": {
+        "nodeAffinity": {
+          "requiredDuringSchedulingIgnoredDuringExecution": {
+            "nodeSelectorTerms": [{"matchExpressions": [{"key": "dedicated", "operator": "In", "values": ["gpu"]}]}]
+          }
+        }
+      }
+    }
+  ],
+  "controllers": [
+    {"kind": "Deployment", "name": "web", "namespace": "default", "replicas": 3, "desiredReplicas": 3, "updateStrategy": "RollingUpdate"},
+    {"kind": "Deployment", "name": "api", "namespace": "api", "replicas": 2, "desiredReplicas": 2, "updateStrategy": "RollingUpdate"},
+    {"kind": "Deployment", "name": "pipeline", "namespace": "data-pipeline", "replicas": 2, "desiredReplicas": 2, "updateStrategy": "RollingUpdate"},
+    {"kind": "DaemonSet", "name": "monitor", "namespace": "kube-system", "replicas": 2, "desiredReplicas": 2, "updateStrategy": "RollingUpdate"}
+  ],
+  "hpas": [],
+  "pdbs": [],
+  "pvcs": [],
+  "pricing": {
+    "provider": "aws",
+    "region": "us-east-1",
+    "instancePricing": {
+      "m5.xlarge": {"onDemandHourly": 0.192, "spotHourly": 0.058}
+    }
+  },
+  "usageProfile": {
+    "default/web-abc1/nginx": {"currentCPU": 60, "currentMemory": 104857600, "p50CPU": 50, "p90CPU": 80, "p95CPU": 100, "p99CPU": 130, "p50Memory": 104857600, "p90Memory": 157286400, "p95Memory": 188743680, "p99Memory": 230686720, "dataPoints": 2016},
+    "default/web-abc2/nginx": {"currentCPU": 55, "currentMemory": 100663296, "p50CPU": 48, "p90CPU": 78, "p95CPU": 98, "p99CPU": 128, "p50Memory": 100663296, "p90Memory": 150994944, "p95Memory": 184549376, "p99Memory": 226492416, "dataPoints": 2016},
+    "default/web-abc3/nginx": {"currentCPU": 65, "currentMemory": 109051904, "p50CPU": 52, "p90CPU": 82, "p95CPU": 102, "p99CPU": 132, "p50Memory": 109051904, "p90Memory": 163577856, "p95Memory": 192937984, "p99Memory": 234881024, "dataPoints": 2016},
+    "api/api-def1/api": {"currentCPU": 100, "currentMemory": 83886080, "p50CPU": 80, "p90CPU": 130, "p95CPU": 160, "p99CPU": 190, "p50Memory": 83886080, "p90Memory": 125829120, "p95Memory": 146800640, "p99Memory": 178257920, "dataPoints": 2016},
+    "api/api-def2/api": {"currentCPU": 110, "currentMemory": 88080384, "p50CPU": 85, "p90CPU": 135, "p95CPU": 165, "p99CPU": 195, "p50Memory": 88080384, "p90Memory": 130023424, "p95Memory": 150994944, "p99Memory": 184549376, "dataPoints": 2016},
+    "data-pipeline/pipeline-1/worker": {"currentCPU": 200, "currentMemory": 419430400, "p50CPU": 150, "p90CPU": 280, "p95CPU": 350, "p99CPU": 420, "p50Memory": 419430400, "p90Memory": 629145600, "p95Memory": 734003200, "p99Memory": 891289600, "dataPoints": 2016},
+    "data-pipeline/pipeline-2/worker": {"currentCPU": 210, "currentMemory": 440401920, "p50CPU": 160, "p90CPU": 290, "p95CPU": 360, "p99CPU": 430, "p50Memory": 440401920, "p90Memory": 650117120, "p95Memory": 755974656, "p99Memory": 922746880, "dataPoints": 2016},
+    "kube-system/monitor-ds-1/agent": {"currentCPU": 20, "currentMemory": 33554432, "p50CPU": 15, "p90CPU": 25, "p95CPU": 30, "p99CPU": 40, "p50Memory": 33554432, "p90Memory": 50331648, "p95Memory": 58720256, "p99Memory": 67108864, "dataPoints": 2016},
+    "kube-system/monitor-ds-2/agent": {"currentCPU": 22, "currentMemory": 35651584, "p50CPU": 16, "p90CPU": 26, "p95CPU": 32, "p99CPU": 42, "p50Memory": 35651584, "p90Memory": 52428800, "p95Memory": 62914560, "p99Memory": 71303168, "dataPoints": 2016},
+    "default/gpu-job-1/cuda": {"currentCPU": 1800, "currentMemory": 3758096384, "p50CPU": 1500, "p90CPU": 1800, "p95CPU": 1900, "p99CPU": 1950, "p50Memory": 3221225472, "p90Memory": 3758096384, "p95Memory": 3932160000, "p99Memory": 4026531840, "dataPoints": 500}
+  },
+  "metricsAvailable": true,
+  "prometheusAvailable": true
+}

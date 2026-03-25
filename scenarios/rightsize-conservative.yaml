@@ -1,0 +1,14 @@
+apiVersion: kubewise.io/v1alpha1
+kind: RightSize
+metadata:
+  name: rightsize-conservative
+  description: "Conservative right-sizing: p95 with 30% buffer, excludes kube-system"
+spec:
+  percentile: p95
+  buffer: 30
+  scope:
+    namespaces: ["*"]
+    exclude:
+      - namespace: kube-system
+  limits:
+    strategy: ratio

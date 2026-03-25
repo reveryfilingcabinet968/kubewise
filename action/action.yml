@@ -1,0 +1,108 @@
+name: 'KubeWise Cost Check'
+description: 'Run KubeWise what-if simulation and post results as PR comment'
+
+inputs:
+  kubeconfig:
+    description: 'Base64-encoded kubeconfig'
+    required: true
+  scenario:
+    description: 'Scenario type: rightsize, consolidate, spot'
+    required: true
+    default: 'rightsize'
+  scenario-file:
+    description: 'Path to scenario YAML file (overrides scenario type)'
+    required: false
+  percentile:
+    description: 'Usage percentile for right-sizing'
+    default: 'p95'
+  buffer:
+    description: 'Buffer percentage for right-sizing'
+    default: '20'
+  node-type:
+    description: 'Target node type for consolidation'
+    required: false
+  min-replicas:
+    description: 'Minimum replicas for spot eligibility'
+    default: '2'
+  discount:
+    description: 'Spot discount fraction'
+    default: '0.65'
+  comment:
+    description: 'Post result as PR comment'
+    default: 'true'
+  fail-on-risk:
+    description: 'Fail the check if risk is red'
+    default: 'false'
+
+outputs:
+  savings:
+    description: 'Projected monthly savings'
+  savings-percent:
+    description: 'Projected savings percentage'
+  risk-level:
+    description: 'Overall risk level (green, amber, red)'
+  markdown:
+    description: 'Full markdown report'
+
+runs:
+  using: 'composite'
+  steps:
+    - name: Set up Go
+      uses: actions/setup-go@v5
+      with:
+        go-version: '1.26'
+
+    - name: Build KubeWise CLI
+      shell: bash
+      run: go build -o ${{ github.action_path }}/kubectl-whatif ./cmd/kubectl-whatif/
+
+    - name: Run KubeWise simulation
+      shell: bash
+      id: simulate
+      env:
+        INPUT_KUBECONFIG: ${{ inputs.kubeconfig }}
+        INPUT_SCENARIO: ${{ inputs.scenario }}
+        INPUT_SCENARIO_FILE: ${{ inputs.scenario-file }}
+        INPUT_PERCENTILE: ${{ inputs.percentile }}
+        INPUT_BUFFER: ${{ inputs.buffer }}
+        INPUT_NODE_TYPE: ${{ inputs.node-type }}
+        INPUT_MIN_REPLICAS: ${{ inputs.min-replicas }}
+        INPUT_DISCOUNT: ${{ inputs.discount }}
+        INPUT_COMMENT: ${{ inputs.comment }}
+        INPUT_FAIL_ON_RISK: ${{ inputs.fail-on-risk }}
+      run: ${{ github.action_path }}/entrypoint.sh
+
+    - name: Post PR comment
+      if: inputs.comment == 'true' && github.event_name == 'pull_request'
+      uses: actions/github-script@v7
+      with:
+        script: |
+          const fs = require('fs');
+          const body = fs.readFileSync('/tmp/kubewise-report.md', 'utf8');
+          const marker = '<!-- kubewise-cost-check -->';
+
+          // Find existing comment
+          const { data: comments } = await github.rest.issues.listComments({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            issue_number: context.issue.number,
+          });
+          const existing = comments.find(c => c.body.includes(marker));
+
+          const fullBody = marker + '\n' + body;
+
+          if (existing) {
+            await github.rest.issues.updateComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              comment_id: existing.id,
+              body: fullBody,
+            });
+          } else {
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+              body: fullBody,
+            });
+          }

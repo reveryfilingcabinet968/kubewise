@@ -1,0 +1,58 @@
+version: 2
+
+project_name: kubectl-whatif
+
+builds:
+  - id: kubectl-whatif
+    main: ./cmd/kubectl-whatif/
+    binary: kubectl-whatif
+    env:
+      - CGO_ENABLED=0
+    goos:
+      - linux
+      - darwin
+    goarch:
+      - amd64
+      - arm64
+    ldflags:
+      - -s -w
+      - -X main.version={{.Version}}
+      - -X main.buildDate={{.Date}}
+
+archives:
+  - id: kubectl-whatif
+    format: tar.gz
+    name_template: "{{ .ProjectName }}_{{ .Version }}_{{ .Os }}_{{ .Arch }}"
+
+checksum:
+  name_template: "checksums.txt"
+
+changelog:
+  sort: asc
+  filters:
+    exclude:
+      - "^docs:"
+      - "^test:"
+      - "^ci:"
+      - "^chore:"
+
+release:
+  github:
+    owner: tochemey
+    name: kubewise
+  draft: false
+  prerelease: auto
+
+krews:
+  - name: whatif
+    ids:
+      - kubectl-whatif
+    repository:
+      owner: tochemey
+      name: krew-index
+    homepage: "https://github.com/tochemey/kubewise"
+    short_description: "Kubernetes cost and performance what-if simulator"
+    description: |
+      KubeWise is a Kubernetes cost × performance "what-if" simulator.
+      It snapshots a live cluster's state, applies hypothetical changes,
+      simulates the outcome, and reports cost savings alongside reliability risk.

@@ -1,0 +1,12 @@
+apiVersion: kubewise.io/v1alpha1
+kind: RightSize
+metadata:
+  name: rightsize-aggressive
+  description: "Aggressive right-sizing: p90 with 10% buffer, all namespaces, fixed limits"
+spec:
+  percentile: p90
+  buffer: 10
+  scope:
+    namespaces: ["*"]
+  limits:
+    strategy: fixed
