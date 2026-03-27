@@ -127,13 +127,13 @@ What we skip (Phase 2):
 
 Estimated from usage percentiles vs new memory limits using linear interpolation:
 
-| Condition | Estimated risk |
-|-----------|---------------|
-| newLimit > P99 | < 1% (green) |
-| P95 < newLimit <= P99 | 1-5% (amber) |
-| P90 < newLimit <= P95 | 5-10% (red) |
-| P50 < newLimit <= P90 | 10-50% (red) |
-| newLimit <= P50 | 50%+ (red) |
+| Condition             | Estimated risk |
+|-----------------------|----------------|
+| newLimit > P99        | < 1% (green)   |
+| P95 < newLimit <= P99 | 1-5% (amber)   |
+| P90 < newLimit <= P95 | 5-10% (red)    |
+| P50 < newLimit <= P90 | 10-50% (red)   |
+| newLimit <= P50       | 50%+ (red)     |
 
 Per-workload risk: `1 - product(1 - container_risk)` across all containers.
 
@@ -151,10 +151,10 @@ Based on historical interruption rates by instance family:
 
 ## Pricing data
 
-| Provider | Source | Pricing model |
-|----------|--------|---------------|
-| AWS | EC2 Pricing API (Bulk) | Per instance type |
-| GCP | Cloud Billing Catalog | Per vCPU + per GB RAM |
-| Azure | Retail Prices API | Per instance type |
+| Provider | Source                 | Pricing model         |
+|----------|------------------------|-----------------------|
+| AWS      | EC2 Pricing API (Bulk) | Per instance type     |
+| GCP      | Cloud Billing Catalog  | Per vCPU + per GB RAM |
+| Azure    | Retail Prices API      | Per instance type     |
 
 Pricing is cached locally in `~/.kubewise/pricing/{provider}_{region}.json` with a 24-hour TTL. If cloud APIs are unreachable, users can provide a YAML pricing file with `--pricing-file`.

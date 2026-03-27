@@ -42,13 +42,13 @@ spec:
 
 ### Fields
 
-| Field | Type | Default | Description |
-|-------|------|---------|-------------|
-| `percentile` | string | p95 | Which usage percentile to base new requests on |
-| `buffer` | int | 20 | Percentage headroom above the percentile |
-| `scope.namespaces` | string[] | ["*"] | Namespaces to include |
-| `scope.exclude` | object[] | [] | Namespace or label exclusions |
-| `limits.strategy` | string | ratio | How to compute new limits |
+| Field              | Type     | Default | Description                                    |
+|--------------------|----------|---------|------------------------------------------------|
+| `percentile`       | string   | p95     | Which usage percentile to base new requests on |
+| `buffer`           | int      | 20      | Percentage headroom above the percentile       |
+| `scope.namespaces` | string[] | ["*"]   | Namespaces to include                          |
+| `scope.exclude`    | object[] | []      | Namespace or label exclusions                  |
+| `limits.strategy`  | string   | ratio   | How to compute new limits                      |
 
 ### Limit strategies
 
@@ -83,11 +83,11 @@ spec:
 
 ### Fields
 
-| Field | Type | Default | Description |
-|-------|------|---------|-------------|
-| `target_node_type` | string | required | Target instance type |
-| `max_nodes` | int | 0 | Maximum number of nodes (0 = unlimited) |
-| `keep_node_pools` | string[] | [] | Node pool names to leave untouched |
+| Field              | Type     | Default  | Description                             |
+|--------------------|----------|----------|-----------------------------------------|
+| `target_node_type` | string   | required | Target instance type                    |
+| `max_nodes`        | int      | 0        | Maximum number of nodes (0 = unlimited) |
+| `keep_node_pools`  | string[] | []       | Node pool names to leave untouched      |
 
 ### How it works
 
@@ -129,12 +129,12 @@ spec:
 
 ### Fields
 
-| Field | Type | Default | Description |
-|-------|------|---------|-------------|
-| `eligibility.min_replicas` | int | 2 | Minimum replica count for eligibility |
-| `eligibility.controller_types` | string[] | all | Controller types eligible for spot |
-| `eligibility.exclude_namespaces` | string[] | [] | Namespaces to exclude |
-| `spot_discount` | float | 0.65 | Spot discount fraction (0.65 = 65% off) |
+| Field                            | Type     | Default | Description                             |
+|----------------------------------|----------|---------|-----------------------------------------|
+| `eligibility.min_replicas`       | int      | 2       | Minimum replica count for eligibility   |
+| `eligibility.controller_types`   | string[] | all     | Controller types eligible for spot      |
+| `eligibility.exclude_namespaces` | string[] | []      | Namespaces to exclude                   |
+| `spot_discount`                  | float    | 0.65    | Spot discount fraction (0.65 = 65% off) |
 
 ### CLI equivalent
 

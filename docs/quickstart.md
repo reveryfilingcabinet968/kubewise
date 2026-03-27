@@ -8,13 +8,30 @@
 
 ## Installation
 
-### Via krew (recommended)
+### Homebrew (macOS / Linux)
+
+```bash
+brew install tochemey/tap/kubewise
+```
+
+### Scoop (Windows)
+
+```bash
+scoop bucket add kubewise https://github.com/tochemey/scoop-bucket.git
+scoop install kubewise
+```
+
+### krew (kubectl plugin)
 
 ```bash
 kubectl krew install whatif
 ```
 
-### Via Go install
+### Pre-built binaries
+
+Download from the [Releases](https://github.com/tochemey/kubewise/releases) page. Binaries are available for macOS (amd64/arm64), Linux (amd64/arm64), and Windows (amd64).
+
+### Go install
 
 ```bash
 go install github.com/tochemey/kubewise/cmd/kubectl-whatif@latest
@@ -103,12 +120,12 @@ kubectl whatif rightsize --output=markdown
 
 ## Common flags
 
-| Flag | Description | Default |
-|------|-------------|---------|
-| `--kubeconfig` | Path to kubeconfig | `$KUBECONFIG` or `~/.kube/config` |
-| `--context` | Kubernetes context to use | Current context |
-| `--namespace` | Limit to a specific namespace | All namespaces |
-| `--prometheus-url` | Prometheus endpoint | Auto-discovered |
-| `--output` / `-o` | Output format: table, json, markdown | table |
-| `--verbose` | Show per-workload breakdown | false |
-| `--no-color` | Disable terminal colors | false |
+| Flag               | Description                          | Default                           |
+|--------------------|--------------------------------------|-----------------------------------|
+| `--kubeconfig`     | Path to kubeconfig                   | `$KUBECONFIG` or `~/.kube/config` |
+| `--context`        | Kubernetes context to use            | Current context                   |
+| `--namespace`      | Limit to a specific namespace        | All namespaces                    |
+| `--prometheus-url` | Prometheus endpoint                  | Auto-discovered                   |
+| `--output` / `-o`  | Output format: table, json, markdown | table                             |
+| `--verbose`        | Show per-workload breakdown          | false                             |
+| `--no-color`       | Disable terminal colors              | false                             |

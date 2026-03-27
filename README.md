@@ -66,26 +66,43 @@ Existing tools either show you the past (Kubecost) or act on the future without 
 ### Install
 
 ```bash
-# Via krew
+# Homebrew (macOS / Linux)
+brew install tochemey/tap/kubewise
+
+# Scoop (Windows)
+scoop bucket add kubewise https://github.com/tochemey/scoop-bucket.git
+scoop install kubewise
+
+# krew (kubectl plugin)
 kubectl krew install whatif
 
-# Via Go
+# Go install
 go install github.com/tochemey/kubewise/cmd/kubectl-whatif@latest
+```
+
+Pre-built binaries for macOS, Linux, and Windows are available on the [Releases](https://github.com/tochemey/kubewise/releases) page.
+
+**From source:**
+
+```bash
+git clone https://github.com/tochemey/kubewise.git
+cd kubewise
+make install
 ```
 
 ### Global Flags
 
 These flags apply to all commands:
 
-| Flag | Default | Description |
-|------|---------|-------------|
-| `--kubeconfig` | `~/.kube/config` | Path to kubeconfig file |
-| `--context` | current context | Kubernetes context to use |
-| `--namespace` | all | Limit to specific namespace |
-| `--prometheus-url` | auto-detect | Prometheus endpoint for historical metrics |
-| `--output`, `-o` | `table` | Output format: `table`, `json`, `markdown` |
-| `--verbose` | `false` | Show detailed per-workload breakdown |
-| `--no-color` | `false` | Disable terminal colors |
+| Flag               | Default          | Description                                |
+|--------------------|------------------|--------------------------------------------|
+| `--kubeconfig`     | `~/.kube/config` | Path to kubeconfig file                    |
+| `--context`        | current context  | Kubernetes context to use                  |
+| `--namespace`      | all              | Limit to specific namespace                |
+| `--prometheus-url` | auto-detect      | Prometheus endpoint for historical metrics |
+| `--output`, `-o`   | `table`          | Output format: `table`, `json`, `markdown` |
+| `--verbose`        | `false`          | Show detailed per-workload breakdown       |
+| `--no-color`       | `false`          | Disable terminal colors                    |
 
 ## 📸 Snapshot — See Current Cost Breakdown
 
@@ -174,13 +191,13 @@ kubectl whatif rightsize --exclude-namespaces=kube-system,monitoring
 kubectl whatif rightsize --verbose
 ```
 
-| Flag | Default | Description |
-|------|---------|-------------|
-| `--percentile` | `p95` | Usage percentile: `p50`, `p90`, `p95`, `p99` |
-| `--buffer` | `20` | Buffer percentage above the percentile |
-| `--scope-namespaces` | all | Comma-separated namespaces to include |
-| `--exclude-namespaces` | none | Comma-separated namespaces to exclude |
-| `--limit-strategy` | none | How to set limits: `ratio`, `fixed`, or empty |
+| Flag                   | Default | Description                                   |
+|------------------------|---------|-----------------------------------------------|
+| `--percentile`         | `p95`   | Usage percentile: `p50`, `p90`, `p95`, `p99`  |
+| `--buffer`             | `20`    | Buffer percentage above the percentile        |
+| `--scope-namespaces`   | all     | Comma-separated namespaces to include         |
+| `--exclude-namespaces` | none    | Comma-separated namespaces to exclude         |
+| `--limit-strategy`     | none    | How to set limits: `ratio`, `fixed`, or empty |
 
 Example output:
 
@@ -215,13 +232,13 @@ kubectl whatif consolidate --node-type=m6i.2xlarge --max-nodes=10
 kubectl whatif consolidate --node-type=m6i.xlarge --keep-pool=critical-pool
 ```
 
-| Flag | Default | Description |
-|------|---------|-------------|
-| `--node-type` | required | Target instance type for consolidation |
-| `--max-nodes` | unlimited | Maximum number of nodes in the new pool |
-| `--keep-pool` | none | Existing node pool to preserve |
-| `--target-cpu` | `0.8` | Target CPU utilization ratio |
-| `--target-memory` | `0.8` | Target memory utilization ratio |
+| Flag              | Default   | Description                             |
+|-------------------|-----------|-----------------------------------------|
+| `--node-type`     | required  | Target instance type for consolidation  |
+| `--max-nodes`     | unlimited | Maximum number of nodes in the new pool |
+| `--keep-pool`     | none      | Existing node pool to preserve          |
+| `--target-cpu`    | `0.8`     | Target CPU utilization ratio            |
+| `--target-memory` | `0.8`     | Target memory utilization ratio         |
 
 ## 💰 Spot — Simulate Spot Instance Migration
 
@@ -244,12 +261,12 @@ kubectl whatif spot --exclude-namespaces=kube-system,databases
 kubectl whatif spot --verbose
 ```
 
-| Flag | Default | Description |
-|------|---------|-------------|
-| `--min-replicas` | `2` | Minimum replicas for spot eligibility |
-| `--discount` | `0.65` | Spot discount fraction (0.0 - 1.0) |
-| `--exclude-namespaces` | none | Comma-separated namespaces to exclude |
-| `--controller-types` | `Deployment,ReplicaSet` | Controller types eligible for spot |
+| Flag                   | Default                 | Description                           |
+|------------------------|-------------------------|---------------------------------------|
+| `--min-replicas`       | `2`                     | Minimum replicas for spot eligibility |
+| `--discount`           | `0.65`                  | Spot discount fraction (0.0 - 1.0)    |
+| `--exclude-namespaces` | none                    | Comma-separated namespaces to exclude |
+| `--controller-types`   | `Deployment,ReplicaSet` | Controller types eligible for spot    |
 
 ## 📝 Scenario Files — Define Reusable Scenarios
 
@@ -323,28 +340,28 @@ jobs:
 
 ### Action Inputs
 
-| Input | Required | Default | Description |
-|-------|----------|---------|-------------|
-| `kubeconfig` | yes | — | Base64-encoded kubeconfig |
-| `scenario` | yes | `rightsize` | Scenario type: `rightsize`, `consolidate`, `spot`, `snapshot` |
-| `scenario-file` | no | — | Path to scenario YAML (overrides scenario type) |
-| `percentile` | no | `p95` | Usage percentile (rightsize only) |
-| `buffer` | no | `20` | Buffer percentage (rightsize only) |
-| `node-type` | no | — | Target instance type (consolidate only, required) |
-| `min-replicas` | no | `2` | Minimum replicas for spot eligibility (spot only) |
-| `discount` | no | `0.65` | Spot discount fraction (spot only) |
-| `save` | no | — | Save snapshot to JSON file (snapshot only) |
-| `comment` | no | `true` | Post result as PR comment |
-| `fail-on-risk` | no | `false` | Fail the check if risk is red |
+| Input           | Required | Default     | Description                                                   |
+|-----------------|----------|-------------|---------------------------------------------------------------|
+| `kubeconfig`    | yes      | —           | Base64-encoded kubeconfig                                     |
+| `scenario`      | yes      | `rightsize` | Scenario type: `rightsize`, `consolidate`, `spot`, `snapshot` |
+| `scenario-file` | no       | —           | Path to scenario YAML (overrides scenario type)               |
+| `percentile`    | no       | `p95`       | Usage percentile (rightsize only)                             |
+| `buffer`        | no       | `20`        | Buffer percentage (rightsize only)                            |
+| `node-type`     | no       | —           | Target instance type (consolidate only, required)             |
+| `min-replicas`  | no       | `2`         | Minimum replicas for spot eligibility (spot only)             |
+| `discount`      | no       | `0.65`      | Spot discount fraction (spot only)                            |
+| `save`          | no       | —           | Save snapshot to JSON file (snapshot only)                    |
+| `comment`       | no       | `true`      | Post result as PR comment                                     |
+| `fail-on-risk`  | no       | `false`     | Fail the check if risk is red                                 |
 
 ### Action Outputs
 
-| Output | Description |
-|--------|-------------|
-| `savings` | Projected monthly savings |
-| `savings-percent` | Projected savings percentage |
-| `risk-level` | Overall risk level (`green`, `amber`, `red`) |
-| `markdown` | Full markdown report |
+| Output            | Description                                  |
+|-------------------|----------------------------------------------|
+| `savings`         | Projected monthly savings                    |
+| `savings-percent` | Projected savings percentage                 |
+| `risk-level`      | Overall risk level (`green`, `amber`, `red`) |
+| `markdown`        | Full markdown report                         |
 
 ### Examples
 
